@@ -20,7 +20,7 @@ awk -F"/" '{print $4;exit}' a.out | xargs mkdir -p
 input=$(realpath a.out)
 cd $book
 while IFS= read -r line ; do
-    display_name=$(awk -F"/" '{print $7;exit}' <<<$line)
+    display_name=$(echo $line | awk -F"/" '{print $7;exit}')
     # Use curl to download the content and save it to a file named after the display name
     curl --skip-existing -o "${display_name}.html" "https://www.royalroad.com$line"
 done < $input
