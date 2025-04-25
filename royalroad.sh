@@ -1,4 +1,4 @@
-#!/run/current-system/sw/bin/bash
+#!/bin/sh
 
 # Base URL for the links (adjust this if necessary)
 # Fetch the HTML content and extract links from the table
@@ -17,12 +17,12 @@ in_table && /<a href=/ {
 book=$(awk -F"/" '{print $4;exit}' a.out)
 echo $book
 awk -F"/" '{print $4;exit}' a.out | xargs mkdir -p
-cd $book
 input=$(realpath a.out)
+cd $book
 while IFS= read -r line ; do
     display_name=$(awk -F"/" '{print $7;exit}' <<<$line)
     # Use curl to download the content and save it to a file named after the display name
     curl --skip-existing -o "${display_name}.html" "https://www.royalroad.com$line"
-done <$input
+done < $input
 cd ..
 rm a.out
